@@ -6,7 +6,8 @@ import session from "express-session";
 import Postgres from "./libs/Postgres";
 import router from "./routes";
 
-const ASSET_PATH = process.env.NODE_ENV === "development" ? "../../dist/client" : "./client";
+//const ASSET_PATH = process.env.NODE_ENV === "development" ? "../../dist/client" : "./client";
+const ASSET_PATH = "../../dist/client";
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(
   session({
-    store: Postgres.getSessionStore(session),
+    //store: Postgres.getSessionStore(session),
     secret: "freshlytics",
     resave: false,
     saveUninitialized: false,

@@ -1,5 +1,6 @@
 import Postgres from "../libs/Postgres";
 import { Project } from "../types/Project.type";
+import { store } from "../libs/RavenDB";
 
 async function add(id: string, name: string, timezone: string) {
   const statement = "INSERT INTO projects (id, name, timezone) VALUES ($1, $2, $3)";
@@ -26,15 +27,13 @@ async function remove(id: string) {
 }
 
 async function getAll(): Promise<Project[]> {
-  const statement = "SELECT id, name, timezone FROM projects";
-  const result = await Postgres.query(statement, []);
-  return result.rows;
+  const session = store.openSession();
+  return session.query<Project>("projects").all();
 }
 
 async function getById(id: string): Promise<Project> {
-  const statement = "SELECT id, name, timezone FROM projects WHERE id = $1";
-  const result = await Postgres.query(statement, [id]);
-  return result.rows[0];
+  const session = store.openSession();
+  return session.load<Project>(id);
 }
 
 export default {
