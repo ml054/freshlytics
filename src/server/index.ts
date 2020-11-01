@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
 import session from "express-session";
-import Postgres from "./libs/Postgres";
 import router from "./routes";
 
 //const ASSET_PATH = process.env.NODE_ENV === "development" ? "../../dist/client" : "./client";
@@ -51,6 +50,5 @@ function handleError(err: Error, _req: Request, res: Response, _next: NextFuncti
 }
 
 async function gracefullyExitProcess() {
-  await Postgres.close();
   server.close(() => process.exit());
 }

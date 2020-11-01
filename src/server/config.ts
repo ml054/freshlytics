@@ -1,5 +1,5 @@
 export default {
-  defaultPassword: "hunter2",
+  defaultPassword: "swordfish",
   ravendbUrl: "http://127.0.0.1:8080",
   ravendbDatabase: "freshlytics"
 };

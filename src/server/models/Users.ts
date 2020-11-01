@@ -1,4 +1,3 @@
-import Postgres from "../libs/Postgres";
 import { User } from "../types/User.type";
 import { store } from "../libs/RavenDB";
 
@@ -15,18 +14,9 @@ async function add(name: string, password: string, isAdmin: boolean) {
 }
 
 async function update(id: string, user: User) {
-  const statement = `
-    UPDATE
-      users 
-    SET
-      name = $2,
-      is_admin = $3,
-      updated_at = NOW()
-    WHERE
-      id = $1
-  `;
-
-  await Postgres.query(statement, [id, user.name, String(user.is_admin)]);
+  const session = store.openSession();
+  await session.store(user, id);
+  await session.saveChanges();
 }
 
 async function updatePassword(id: string, password: string) {
@@ -42,21 +32,20 @@ async function remove(id: string) {
 
 async function getAll(): Promise<User[]> {
   const session = store.openSession();
-  return session.query<User>("users").all();
+  return session.query<User>("Users").all();
 }
 
-async function getById(id: string): Promise<User> {
-  const statement = "SELECT id, name, is_admin FROM users WHERE id = $1";
-  const result = await Postgres.query(statement, [id]);
-  return result.rows[0];
-}
-
-async function getByName(name: string): Promise<User> {
+async function getById(id: string): Promise<User | null> {
   const session = store.openSession();
-  return session
-    .query<User>("users")
+  return await session.load<User>(id);
+}
+
+async function getByName(name: string): Promise<User | null> {
+  const session = store.openSession();
+  return await session
+    .query<User>("Users")
     .whereEquals("name", name)
-    .first();
+    .firstOrNull();
 }
 
 async function getPasswordByName(name: string): Promise<string | null> {
@@ -65,7 +54,7 @@ async function getPasswordByName(name: string): Promise<string | null> {
     .query("users")
     .whereEquals("name", name)
     .selectFields<string>("password")
-    .first();
+    .firstOrNull();
 }
 
 export default {
