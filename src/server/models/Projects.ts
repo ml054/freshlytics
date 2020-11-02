@@ -3,11 +3,11 @@ import { store } from "../libs/RavenDB";
 
 async function add(id: string, name: string, timezone: string) {
   const session = store.openSession();
-  const project = {
+  const project = Object.assign(new Project(), {
     id,
     name,
     timezone
-  } as Project;
+  });
 
   await session.store(project, id);
   await session.saveChanges();
@@ -27,12 +27,12 @@ async function remove(id: string) {
 
 async function getAll(): Promise<Project[]> {
   const session = store.openSession();
-  return session.query<Project>("Projects").all();
+  return session.query<Project>(Project).all();
 }
 
 async function getById(id: string): Promise<Project> {
   const session = store.openSession();
-  return session.load<Project>(id);
+  return session.load<Project>(id, Project);
 }
 
 export default {

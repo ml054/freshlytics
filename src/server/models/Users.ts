@@ -3,11 +3,12 @@ import { store } from "../libs/RavenDB";
 
 async function add(name: string, password: string, isAdmin: boolean) {
   const session = store.openSession();
-  const user = {
+
+  const user = Object.assign(new User(), {
     name,
     password,
     is_admin: isAdmin
-  } as User;
+  });
 
   await session.store(user, "users/");
   await session.saveChanges();
@@ -32,18 +33,18 @@ async function remove(id: string) {
 
 async function getAll(): Promise<User[]> {
   const session = store.openSession();
-  return session.query<User>("Users").all();
+  return session.query<User>(User).all();
 }
 
 async function getById(id: string): Promise<User | null> {
   const session = store.openSession();
-  return await session.load<User>(id);
+  return await session.load<User>(id, User);
 }
 
 async function getByName(name: string): Promise<User | null> {
   const session = store.openSession();
   return await session
-    .query<User>("Users")
+    .query<User>(User)
     .whereEquals("name", name)
     .firstOrNull();
 }
@@ -51,7 +52,7 @@ async function getByName(name: string): Promise<User | null> {
 async function getPasswordByName(name: string): Promise<string | null> {
   const session = store.openSession();
   return session
-    .query("users")
+    .query(User)
     .whereEquals("name", name)
     .selectFields<string>("password")
     .firstOrNull();

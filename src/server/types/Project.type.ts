@@ -1,5 +1,5 @@
-export type Project = {
-  id: string;
-  name: string;
-  timezone: string;
-};
+export class Project {
+  id: string | undefined;
+  name: string | undefined;
+  timezone: string | undefined;
+}

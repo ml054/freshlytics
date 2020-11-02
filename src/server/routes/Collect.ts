@@ -41,20 +41,20 @@ function mapRequestPayload(req: Request, projects: Project[]): PageViewEvent {
   const browserName = UserAgentUtil.getBrowserName(ua);
   const browserNameVersion = UserAgentUtil.getBrowserNameVersion(ua);
 
-  return {
+  return Object.assign(new PageViewEvent(), {
     project_id: projectId,
     path,
     referrer,
     date,
     browser_name: browserName,
     browser_name_version: browserNameVersion
-  };
+  });
 }
 
-function getProjectTimezone(projectId: string, projects: Project[]) {
+function getProjectTimezone(projectId: string, projects: Project[]): string {
   const project = projects.find(p => p.id === projectId);
 
-  if (project === undefined) {
+  if (project === undefined || project.timezone === undefined) {
     throw new Error(`Project with project_id:${projectId} doesn't exist`);
   }
 

@@ -1,6 +1,6 @@
-export type User = {
-  id: string;
-  name: string;
-  is_admin: boolean;
-  password?: string;
-};
+export class User {
+  id: string | undefined;
+  name: string | undefined;
+  is_admin: boolean | undefined;
+  password?: string | undefined;
+}

@@ -1,8 +1,8 @@
-export type PageViewEvent = {
-  project_id: string;
-  path: string;
-  referrer: string;
-  date: string;
-  browser_name: string;
-  browser_name_version: string;
-};
+export class PageViewEvent {
+  project_id: string | undefined;
+  path: string | undefined;
+  referrer: string | undefined;
+  date: string | undefined;
+  browser_name: string | undefined;
+  browser_name_version: string | undefined;
+}

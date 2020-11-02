@@ -10,7 +10,7 @@ async function add(event: PageViewEvent) {
 async function getByDate(projectId: string, startDate: string, endDate: string) {
   const session = store.openSession();
   return await session
-    .query<PageViewEvent>("PageViewEvents")
+    .query<PageViewEvent>(PageViewEvent)
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
@@ -20,7 +20,7 @@ async function getByDate(projectId: string, startDate: string, endDate: string) 
 async function getByPath(projectId: string, startDate: string, endDate: string, page: number) {
   const session = store.openSession();
   return await session
-    .query<PageViewEvent>("PageViewEvents")
+    .query<PageViewEvent>(PageViewEvent)
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
@@ -35,7 +35,7 @@ async function getByPath(projectId: string, startDate: string, endDate: string, 
 async function getByReferrer(projectId: string, startDate: string, endDate: string, page: number) {
   const session = store.openSession();
   return await session
-    .query<PageViewEvent>("PageViewEvents")
+    .query<PageViewEvent>(PageViewEvent)
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
@@ -51,7 +51,7 @@ async function getByReferrer(projectId: string, startDate: string, endDate: stri
 async function getByBrowserName(projectId: string, startDate: string, endDate: string, page: number) {
   const session = store.openSession();
   return await session
-    .query<PageViewEvent>("PageViewEvents")
+    .query<PageViewEvent>(PageViewEvent)
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
@@ -67,7 +67,7 @@ async function getByBrowserName(projectId: string, startDate: string, endDate: s
 async function getByBrowserNameVersion(projectId: string, startDate: string, endDate: string, page: number) {
   const session = store.openSession();
   return await session
-    .query<PageViewEvent>("PageViewEvents")
+    .query<PageViewEvent>(PageViewEvent)
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
