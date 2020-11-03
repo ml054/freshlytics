@@ -21,10 +21,10 @@ async function getByDate(projectId: string, startDate: string, endDate: string) 
     .all();
 }
 
-function reportQuery(q: any, page: number) {
+function reportQuery(q: any, page: number, extraFieldToGet: string) {
   return q
     .selectCount("total_rows")
-    .selectFields(new QueryData(["date", "count()"], ["date", "total"]))
+    .selectFields(new QueryData(["date", "count()", extraFieldToGet], ["date", "total", "name"]))
     .orderByDescending("count()")
     .take(10)
     .skip(10 * page)
@@ -40,7 +40,8 @@ async function getByPath(projectId: string, startDate: string, endDate: string, 
       .andAlso()
       .whereBetween("date", startDate, endDate)
       .groupBy("project_id", "date", "path"),
-    page
+    page,
+    "path"
   );
 }
 
@@ -53,7 +54,8 @@ async function getByReferrer(projectId: string, startDate: string, endDate: stri
       .andAlso()
       .whereBetween("date", startDate, endDate)
       .groupBy("project_id", "date", "referrer"),
-    page
+    page,
+    "referrer"
   );
 }
 
@@ -66,7 +68,8 @@ async function getByBrowserName(projectId: string, startDate: string, endDate: s
       .andAlso()
       .whereBetween("date", startDate, endDate)
       .groupBy("project_id", "date", "browser_name"),
-    page
+    page,
+    "browser_name"
   );
 }
 
@@ -79,7 +82,8 @@ async function getByBrowserNameVersion(projectId: string, startDate: string, end
       .andAlso()
       .whereBetween("date", startDate, endDate)
       .groupBy("project_id", "date", "browser_name_version"),
-    page
+    page,
+    "browser_name_version"
   );
 }
 
