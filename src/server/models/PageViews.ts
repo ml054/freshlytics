@@ -16,15 +16,15 @@ async function getByDate(projectId: string, startDate: string, endDate: string) 
     .andAlso()
     .whereBetween("date", startDate, endDate)
     .groupBy("project_id", "date")
+    .selectKey("date", "date")
     .selectCount("total")
-    .selectFields("date")
     .all();
 }
 
 function reportQuery(q: any, page: number) {
   return q
     .selectCount("total_rows")
-    .selectFields(new QueryData(["key()", "count()"], ["name", "total"]))
+    .selectFields(new QueryData(["date", "count()"], ["date", "total"]))
     .orderByDescending("count()")
     .take(10)
     .skip(10 * page)
