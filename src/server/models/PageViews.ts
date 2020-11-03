@@ -1,5 +1,6 @@
 import { store } from "../libs/RavenDB";
 import { PageViewEvent } from "../types/PageViewEvent.type";
+import { QueryData } from "ravendb";
 
 async function add(event: PageViewEvent) {
   const session = store.openSession();
@@ -14,14 +15,16 @@ async function getByDate(projectId: string, startDate: string, endDate: string) 
     .whereEquals("project_id", projectId)
     .andAlso()
     .whereBetween("date", startDate, endDate)
+    .groupBy("project_id", "date")
+    .selectCount("total")
+    .selectFields("date")
     .all();
 }
 
 function reportQuery(q: any, page: number) {
   return q
     .selectCount("total_rows")
-    .selectFields("key()", "name")
-    .selectFields("count()", "total")
+    .selectFields(new QueryData(["key()", "count()"], ["name", "total"]))
     .orderByDescending("count()")
     .take(10)
     .skip(10 * page)
